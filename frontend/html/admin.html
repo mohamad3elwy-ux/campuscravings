@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Admin - Campus Cravings</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header"><div class="brand">Admin Panel</div></header>
+  <main class="container">
+    <h2>Add Truck / Menu Item</h2>
+    <form id="truckForm">
+      <label>Truck Name<input id="truckName"></label>
+      <label>Location<input id="truckLocation"></label>
+      <button class="btn" id="addTruck">Add Truck</button>
+    </form>
+
+    <form id="itemForm">
+      <label>Truck ID<input id="itemTruckId" type="number"></label>
+      <label>Item Name<input id="itemName"></label>
+      <label>Price<input id="itemPrice" type="number" step="0.01"></label>
+      <button class="btn" id="addItem">Add Item</button>
+    </form>
+  </main>
+  <script src="js/main.js"></script>
+</body>
+</html>

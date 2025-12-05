@@ -1,0 +1,228 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900;
+    font-family: 'Germania One', 'UnifrakturCook', 'UnifrakturMaguntia', 'Times New Roman', serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6, .font-german {
+    font-family: 'Germania One', 'UnifrakturCook', 'UnifrakturMaguntia', serif;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+  }
+  
+  .font-german {
+    font-family: 'Germania One', 'UnifrakturCook', 'UnifrakturMaguntia', serif;
+  }
+  
+  button, .btn {
+    font-family: 'Germania One', 'UnifrakturCook', serif;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200;
+    transform: scale(1);
+  }
+  
+  .btn:hover {
+    transform: scale(1.05);
+  }
+  
+  .btn-primary {
+    background-color: #7d0c0c !important;
+    @apply text-white;
+  }
+  
+  .btn-primary:hover {
+    background-color: #9a0f0f !important;
+    transform: scale(1.05);
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 text-gray-800 hover:bg-gray-300;
+  }
+  
+  .btn-secondary:hover {
+    transform: scale(1.05);
+  }
+  
+  .btn-success {
+    background-color: #7d0c0c !important;
+    @apply text-white;
+  }
+  
+  .btn-success:hover {
+    background-color: #9a0f0f !important;
+    transform: scale(1.05);
+  }
+  
+  .btn-danger {
+    @apply bg-red-600 text-white hover:bg-red-700;
+  }
+  
+  .btn-danger:hover {
+    transform: scale(1.05);
+  }
+  
+  /* All buttons with primary color */
+  button[class*="bg-blue"], 
+  button[class*="bg-green"],
+  a[class*="bg-blue"],
+  a[class*="bg-green"] {
+    transition: all 0.2s ease;
+  }
+  
+  button[class*="bg-blue"]:hover, 
+  button[class*="bg-green"]:hover,
+  a[class*="bg-blue"]:hover,
+  a[class*="bg-green"]:hover {
+    transform: scale(1.05);
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-md p-6;
+  }
+  
+  .input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+  }
+  
+  /* Global button hover zoom effect */
+  button, a.btn, .btn {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+  }
+  
+  button:hover, a.btn:hover, .btn:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Override blue/green button colors to #7d0c0c */
+  button.bg-blue-600,
+  button.bg-blue-500,
+  button.bg-green-600,
+  button.bg-green-500,
+  a.bg-blue-600,
+  a.bg-blue-500,
+  a.bg-green-600,
+  a.bg-green-500 {
+    background-color: #7d0c0c !important;
+  }
+  
+  button.bg-blue-600:hover,
+  button.bg-blue-500:hover,
+  button.bg-green-600:hover,
+  button.bg-green-500:hover,
+  a.bg-blue-600:hover,
+  a.bg-blue-500:hover,
+  a.bg-green-600:hover,
+  a.bg-green-500:hover {
+    background-color: #9a0f0f !important;
+    transform: scale(1.05);
+  }
+  
+  .label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+}
+
+.countdown-timer {
+  @apply text-2xl font-bold text-blue-600 bg-blue-50 px-4 py-2 rounded-lg;
+}
+
+.status-badge {
+  @apply px-2 py-1 rounded-full text-xs font-medium;
+}
+
+.status-pending {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.status-confirmed {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.status-preparing {
+  @apply bg-orange-100 text-orange-800;
+}
+
+.status-ready {
+  @apply bg-green-100 text-green-800;
+}
+
+.status-completed {
+  @apply bg-gray-100 text-gray-800;
+}
+
+.status-cancelled {
+  @apply bg-red-100 text-red-800;
+}
+
+.truck-card {
+  @apply bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden;
+}
+
+.menu-item-card {
+  @apply bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 p-4;
+}
+
+.order-card {
+  @apply bg-white rounded-lg shadow-md p-6 border-l-4;
+}
+
+.order-card.pending {
+  @apply border-yellow-500;
+}
+
+.order-card.confirmed {
+  @apply border-blue-500;
+}
+
+.order-card.preparing {
+  @apply border-orange-500;
+}
+
+.order-card.ready {
+  @apply border-green-500;
+}
+
+.order-card.completed {
+  @apply border-gray-500;
+}
+
+.order-card.cancelled {
+  @apply border-red-500;
+}
+
+.loading-spinner {
+  @apply animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600;
+}
+
+.hero-gradient {
+  background: linear-gradient(135deg, #7d0c0c 0%, #9a0f0f 50%, #b81414 100%);
+}
+
+/* Toast fade-up animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apply fade-up animation to toast notifications */
+.toast-enter {
+  animation: fadeUp 0.3s ease-out;
+}
+
+.toast-exit {
+  animation: fadeUp 0.3s ease-out reverse;
+}

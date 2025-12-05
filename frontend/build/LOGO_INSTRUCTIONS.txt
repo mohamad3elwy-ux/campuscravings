@@ -1,0 +1,16 @@
+LOGO SETUP INSTRUCTIONS
+=======================
+
+To add your Campus Cravings logo:
+
+1. Place your logo image file in this folder (frontend/public/)
+2. Name it: logo.png
+3. The logo should feature:
+   - "Campus Cravings" text in gothic/old English style
+   - German flag element
+   - Bowl of fries with cheese illustration
+
+The Navbar component will automatically display the logo once you place it here.
+
+If the logo file is not found, a fallback icon will be displayed.
+
