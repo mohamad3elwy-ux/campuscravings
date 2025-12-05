@@ -10,13 +10,14 @@ const { getUser } = require('../utils/session');
 // 8. GET /api/v1/trucks/view - View all available trucks (Customer)
 router.get('/view', async (req, res) => {
   try {
-    const trucks = await db('FoodTruck.Trucks')
-      .select('truckId', 'truckName', 'truckLogo', 'ownerId', 'truckStatus', 'orderStatus', 'createdAt')
-      .where('truckStatus', 'available')
-      .where('orderStatus', 'available')
-      .orderBy('truckId', 'asc');
+    const result = await db.raw(`
+      SELECT "truckId", "truckName", "truckLogo", "ownerId", "truckStatus", "orderStatus", "createdAt"
+      FROM "FoodTruck"."Trucks"
+      WHERE "truckStatus" = 'available' AND "orderStatus" = 'available'
+      ORDER BY "truckId" ASC
+    `);
     
-    return res.status(200).json(trucks);
+    return res.status(200).json(result.rows);
   } catch (error) {
     console.error('Error:', error.message);
     return res.status(500).json({ error: error.message });
@@ -34,16 +35,17 @@ router.get('/myTruck', async (req, res) => {
       return res.status(403).json({ error: 'Forbidden' });
     }
     
-    const truck = await db('FoodTruck.Trucks')
-      .select('truckId', 'truckName', 'truckLogo', 'ownerId', 'truckStatus', 'orderStatus', 'createdAt')
-      .where('truckId', user.truckId)
-      .first();
+    const result = await db.raw(`
+      SELECT "truckId", "truckName", "truckLogo", "ownerId", "truckStatus", "orderStatus", "createdAt"
+      FROM "FoodTruck"."Trucks"
+      WHERE "truckId" = ${user.truckId}
+    `);
     
-    if (!truck) {
+    if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Truck not found' });
     }
     
-    return res.status(200).json(truck);
+    return res.status(200).json(result.rows[0]);
   } catch (error) {
     console.error('Error:', error.message);
     return res.status(500).json({ error: error.message });
@@ -63,9 +65,9 @@ router.put('/updateOrderStatus', async (req, res) => {
     
     const { orderStatus } = req.body;
     
-    await db('FoodTruck.Trucks')
-      .where('truckId', user.truckId)
-      .update({ orderStatus: orderStatus });
+    await db.raw(`
+      UPDATE "FoodTruck"."Trucks" SET "orderStatus" = '${orderStatus}' WHERE "truckId" = ${user.truckId}
+    `);
     
     return res.status(200).json({ message: 'truck order status updated successfully' });
   } catch (error) {

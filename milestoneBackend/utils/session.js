@@ -26,26 +26,27 @@ async function getUser(req) {
     // Remove 'Bearer ' prefix if present
     const cleanToken = token.replace('Bearer ', '');
     
-    const result = await db('FoodTruck.Sessions as s')
-      .join('FoodTruck.Users as u', 's.userId', 'u.userId')
-      .leftJoin('FoodTruck.Trucks as t', 'u.userId', 't.ownerId')
-      .select(
-        's.id',
-        's.userId',
-        's.token',
-        's.expiresAt',
-        'u.name',
-        'u.birthDate',
-        'u.email',
-        'u.password',
-        'u.role',
-        't.truckId'
-      )
-      .where('s.token', cleanToken)
-      .where('s.expiresAt', '>', new Date())
-      .first();
+    const result = await db.raw(`
+      SELECT 
+        s."id",
+        s."userId",
+        s."token",
+        s."expiresAt",
+        u."name",
+        u."birthDate",
+        u."email",
+        u."password",
+        u."role",
+        t."truckId"
+      FROM "FoodTruck"."Sessions" s
+      JOIN "FoodTruck"."Users" u ON s."userId" = u."userId"
+      LEFT JOIN "FoodTruck"."Trucks" t ON u."userId" = t."ownerId"
+      WHERE s."token" = '${cleanToken}'
+      AND s."expiresAt" > NOW()
+      LIMIT 1
+    `);
     
-    return result || null;
+    return result.rows[0] || null;
   } catch (error) {
     console.error('getUser error:', error.message);
     return null;

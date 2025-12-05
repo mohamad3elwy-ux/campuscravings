@@ -18,10 +18,14 @@ router.post('/new', async (req, res) => {
     const { scheduledPickupTime } = req.body;
     
     // Get cart items with truck info
-    const cartItems = await db('FoodTruck.Carts as c')
-      .join('FoodTruck.MenuItems as m', 'c.itemId', 'm.itemId')
-      .select('c.*', 'm.truckId', 'm.name')
-      .where('c.userId', user.userId);
+    const cartResult = await db.raw(`
+      SELECT c.*, m."truckId", m."name"
+      FROM "FoodTruck"."Carts" c
+      JOIN "FoodTruck"."MenuItems" m ON c."itemId" = m."itemId"
+      WHERE c."userId" = ${user.userId}
+    `);
+    
+    const cartItems = cartResult.rows;
     
     if (cartItems.length === 0) {
       return res.status(400).json({ error: 'Cart is empty' });
@@ -42,33 +46,25 @@ router.post('/new', async (req, res) => {
     }
     
     // Create order
-    const [order] = await db('FoodTruck.Orders')
-      .insert({
-        userId: user.userId,
-        truckId: truckId,
-        orderStatus: 'pending',
-        totalPrice: totalPrice,
-        scheduledPickupTime: scheduledPickupTime || null,
-        estimatedEarliestPickup: scheduledPickupTime || null
-      })
-      .returning('orderId');
+    const pickupTime = scheduledPickupTime ? `'${scheduledPickupTime}'` : 'NULL';
+    const orderResult = await db.raw(`
+      INSERT INTO "FoodTruck"."Orders" ("userId", "truckId", "orderStatus", "totalPrice", "scheduledPickupTime", "estimatedEarliestPickup")
+      VALUES (${user.userId}, ${truckId}, 'pending', ${totalPrice}, ${pickupTime}, ${pickupTime})
+      RETURNING "orderId"
+    `);
     
-    const orderId = order.orderId || order;
+    const orderId = orderResult.rows[0].orderId;
     
     // Insert order items
     for (const item of cartItems) {
-      await db('FoodTruck.OrderItems').insert({
-        orderId: orderId,
-        itemId: item.itemId,
-        quantity: item.quantity,
-        price: item.price
-      });
+      await db.raw(`
+        INSERT INTO "FoodTruck"."OrderItems" ("orderId", "itemId", "quantity", "price")
+        VALUES (${orderId}, ${item.itemId}, ${item.quantity}, ${item.price})
+      `);
     }
     
     // Clear cart
-    await db('FoodTruck.Carts')
-      .where('userId', user.userId)
-      .del();
+    await db.raw(`DELETE FROM "FoodTruck"."Carts" WHERE "userId" = ${user.userId}`);
     
     return res.status(200).json({ message: 'order placed successfully' });
   } catch (error) {
@@ -85,23 +81,16 @@ router.get('/myOrders', async (req, res) => {
       return res.status(401).json({ error: 'Unauthorized' });
     }
     
-    const orders = await db('FoodTruck.Orders as o')
-      .join('FoodTruck.Trucks as t', 'o.truckId', 't.truckId')
-      .select(
-        'o.orderId',
-        'o.userId',
-        'o.truckId',
-        't.truckName',
-        'o.orderStatus',
-        'o.totalPrice',
-        'o.scheduledPickupTime',
-        'o.estimatedEarliestPickup',
-        'o.createdAt'
-      )
-      .where('o.userId', user.userId)
-      .orderBy('o.orderId', 'desc');
+    const result = await db.raw(`
+      SELECT o."orderId", o."userId", o."truckId", t."truckName", o."orderStatus", 
+             o."totalPrice", o."scheduledPickupTime", o."estimatedEarliestPickup", o."createdAt"
+      FROM "FoodTruck"."Orders" o
+      JOIN "FoodTruck"."Trucks" t ON o."truckId" = t."truckId"
+      WHERE o."userId" = ${user.userId}
+      ORDER BY o."orderId" DESC
+    `);
     
-    return res.status(200).json(orders);
+    return res.status(200).json(result.rows);
   } catch (error) {
     console.error('Error:', error.message);
     return res.status(500).json({ error: error.message });
@@ -119,36 +108,29 @@ router.get('/details/:orderId', async (req, res) => {
     const { orderId } = req.params;
     
     // Get order (verify ownership)
-    const order = await db('FoodTruck.Orders as o')
-      .join('FoodTruck.Trucks as t', 'o.truckId', 't.truckId')
-      .select(
-        'o.orderId',
-        't.truckName',
-        'o.orderStatus',
-        'o.totalPrice',
-        'o.scheduledPickupTime',
-        'o.estimatedEarliestPickup',
-        'o.createdAt'
-      )
-      .where('o.orderId', orderId)
-      .where('o.userId', user.userId)
-      .first();
+    const orderResult = await db.raw(`
+      SELECT o."orderId", t."truckName", o."orderStatus", o."totalPrice", 
+             o."scheduledPickupTime", o."estimatedEarliestPickup", o."createdAt"
+      FROM "FoodTruck"."Orders" o
+      JOIN "FoodTruck"."Trucks" t ON o."truckId" = t."truckId"
+      WHERE o."orderId" = ${orderId} AND o."userId" = ${user.userId}
+    `);
     
-    if (!order) {
+    if (orderResult.rows.length === 0) {
       return res.status(404).json({ error: 'Order not found' });
     }
     
-    // Get order items
-    const items = await db('FoodTruck.OrderItems as oi')
-      .join('FoodTruck.MenuItems as m', 'oi.itemId', 'm.itemId')
-      .select(
-        'm.name as itemName',
-        'oi.quantity',
-        'oi.price'
-      )
-      .where('oi.orderId', orderId);
+    const order = orderResult.rows[0];
     
-    return res.status(200).json({ ...order, items: items });
+    // Get order items
+    const itemsResult = await db.raw(`
+      SELECT m."name" as "itemName", oi."quantity", oi."price"
+      FROM "FoodTruck"."OrderItems" oi
+      JOIN "FoodTruck"."MenuItems" m ON oi."itemId" = m."itemId"
+      WHERE oi."orderId" = ${orderId}
+    `);
+    
+    return res.status(200).json({ ...order, items: itemsResult.rows });
   } catch (error) {
     console.error('Error:', error.message);
     return res.status(500).json({ error: error.message });
@@ -166,22 +148,16 @@ router.get('/truckOrders', async (req, res) => {
       return res.status(403).json({ error: 'Forbidden' });
     }
     
-    const orders = await db('FoodTruck.Orders as o')
-      .join('FoodTruck.Users as u', 'o.userId', 'u.userId')
-      .select(
-        'o.orderId',
-        'o.userId',
-        'u.name as customerName',
-        'o.orderStatus',
-        'o.totalPrice',
-        'o.scheduledPickupTime',
-        'o.estimatedEarliestPickup',
-        'o.createdAt'
-      )
-      .where('o.truckId', user.truckId)
-      .orderBy('o.orderId', 'desc');
+    const result = await db.raw(`
+      SELECT o."orderId", o."userId", u."name" as "customerName", o."orderStatus", 
+             o."totalPrice", o."scheduledPickupTime", o."estimatedEarliestPickup", o."createdAt"
+      FROM "FoodTruck"."Orders" o
+      JOIN "FoodTruck"."Users" u ON o."userId" = u."userId"
+      WHERE o."truckId" = ${user.truckId}
+      ORDER BY o."orderId" DESC
+    `);
     
-    return res.status(200).json(orders);
+    return res.status(200).json(result.rows);
   } catch (error) {
     console.error('Error:', error.message);
     return res.status(500).json({ error: error.message });
@@ -202,36 +178,29 @@ router.get('/truckOwner/:orderId', async (req, res) => {
     const { orderId } = req.params;
     
     // Get order (verify ownership)
-    const order = await db('FoodTruck.Orders as o')
-      .join('FoodTruck.Trucks as t', 'o.truckId', 't.truckId')
-      .select(
-        'o.orderId',
-        't.truckName',
-        'o.orderStatus',
-        'o.totalPrice',
-        'o.scheduledPickupTime',
-        'o.estimatedEarliestPickup',
-        'o.createdAt'
-      )
-      .where('o.orderId', orderId)
-      .where('o.truckId', user.truckId)
-      .first();
+    const orderResult = await db.raw(`
+      SELECT o."orderId", t."truckName", o."orderStatus", o."totalPrice", 
+             o."scheduledPickupTime", o."estimatedEarliestPickup", o."createdAt"
+      FROM "FoodTruck"."Orders" o
+      JOIN "FoodTruck"."Trucks" t ON o."truckId" = t."truckId"
+      WHERE o."orderId" = ${orderId} AND o."truckId" = ${user.truckId}
+    `);
     
-    if (!order) {
+    if (orderResult.rows.length === 0) {
       return res.status(404).json({ error: 'Order not found' });
     }
     
-    // Get order items
-    const items = await db('FoodTruck.OrderItems as oi')
-      .join('FoodTruck.MenuItems as m', 'oi.itemId', 'm.itemId')
-      .select(
-        'm.name as itemName',
-        'oi.quantity',
-        'oi.price'
-      )
-      .where('oi.orderId', orderId);
+    const order = orderResult.rows[0];
     
-    return res.status(200).json({ ...order, items: items });
+    // Get order items
+    const itemsResult = await db.raw(`
+      SELECT m."name" as "itemName", oi."quantity", oi."price"
+      FROM "FoodTruck"."OrderItems" oi
+      JOIN "FoodTruck"."MenuItems" m ON oi."itemId" = m."itemId"
+      WHERE oi."orderId" = ${orderId}
+    `);
+    
+    return res.status(200).json({ ...order, items: itemsResult.rows });
   } catch (error) {
     console.error('Error:', error.message);
     return res.status(500).json({ error: error.message });
@@ -253,23 +222,21 @@ router.put('/updateStatus/:orderId', async (req, res) => {
     const { orderStatus, estimatedEarliestPickup } = req.body;
     
     // Verify order belongs to truck owner
-    const existing = await db('FoodTruck.Orders')
-      .where('orderId', orderId)
-      .where('truckId', user.truckId)
-      .first();
+    const existing = await db.raw(`
+      SELECT * FROM "FoodTruck"."Orders" WHERE "orderId" = ${orderId} AND "truckId" = ${user.truckId}
+    `);
     
-    if (!existing) {
+    if (existing.rows.length === 0) {
       return res.status(403).json({ error: 'Not authorized' });
     }
     
-    const updateData = { orderStatus: orderStatus };
+    let updateQuery = `UPDATE "FoodTruck"."Orders" SET "orderStatus" = '${orderStatus}'`;
     if (estimatedEarliestPickup) {
-      updateData.estimatedEarliestPickup = estimatedEarliestPickup;
+      updateQuery += `, "estimatedEarliestPickup" = '${estimatedEarliestPickup}'`;
     }
+    updateQuery += ` WHERE "orderId" = ${orderId}`;
     
-    await db('FoodTruck.Orders')
-      .where('orderId', orderId)
-      .update(updateData);
+    await db.raw(updateQuery);
     
     return res.status(200).json({ message: 'order status updated successfully' });
   } catch (error) {

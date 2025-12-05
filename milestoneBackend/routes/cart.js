@@ -18,32 +18,33 @@ router.post('/new', async (req, res) => {
     const { itemId, quantity, price } = req.body;
     
     // Get the truckId of the new item
-    const newItem = await db('FoodTruck.MenuItems')
-      .select('truckId')
-      .where('itemId', itemId)
-      .first();
+    const newItemResult = await db.raw(`
+      SELECT "truckId" FROM "FoodTruck"."MenuItems" WHERE "itemId" = ${itemId}
+    `);
     
-    if (!newItem) {
+    if (newItemResult.rows.length === 0) {
       return res.status(404).json({ error: 'Menu item not found' });
     }
     
-    // Check existing cart items for different truck
-    const existingCart = await db('FoodTruck.Carts as c')
-      .join('FoodTruck.MenuItems as m', 'c.itemId', 'm.itemId')
-      .select('m.truckId')
-      .where('c.userId', user.userId)
-      .first();
+    const newItem = newItemResult.rows[0];
     
-    if (existingCart && existingCart.truckId !== newItem.truckId) {
+    // Check existing cart items for different truck
+    const existingCartResult = await db.raw(`
+      SELECT m."truckId"
+      FROM "FoodTruck"."Carts" c
+      JOIN "FoodTruck"."MenuItems" m ON c."itemId" = m."itemId"
+      WHERE c."userId" = ${user.userId}
+      LIMIT 1
+    `);
+    
+    if (existingCartResult.rows.length > 0 && existingCartResult.rows[0].truckId !== newItem.truckId) {
       return res.status(400).json({ message: 'Cannot order from multiple trucks' });
     }
     
-    await db('FoodTruck.Carts').insert({
-      userId: user.userId,
-      itemId: itemId,
-      quantity: quantity,
-      price: price
-    });
+    await db.raw(`
+      INSERT INTO "FoodTruck"."Carts" ("userId", "itemId", "quantity", "price")
+      VALUES (${user.userId}, ${itemId}, ${quantity}, ${price})
+    `);
     
     return res.status(200).json({ message: 'item added to cart successfully' });
   } catch (error) {
@@ -60,20 +61,15 @@ router.get('/view', async (req, res) => {
       return res.status(401).json({ error: 'Unauthorized' });
     }
     
-    const cartItems = await db('FoodTruck.Carts as c')
-      .join('FoodTruck.MenuItems as m', 'c.itemId', 'm.itemId')
-      .select(
-        'c.cartId',
-        'c.userId',
-        'c.itemId',
-        'm.name as itemName',
-        'c.price',
-        'c.quantity'
-      )
-      .where('c.userId', user.userId)
-      .orderBy('c.cartId', 'asc');
+    const result = await db.raw(`
+      SELECT c."cartId", c."userId", c."itemId", m."name" as "itemName", c."price", c."quantity"
+      FROM "FoodTruck"."Carts" c
+      JOIN "FoodTruck"."MenuItems" m ON c."itemId" = m."itemId"
+      WHERE c."userId" = ${user.userId}
+      ORDER BY c."cartId" ASC
+    `);
     
-    return res.status(200).json(cartItems);
+    return res.status(200).json(result.rows);
   } catch (error) {
     console.error('Error:', error.message);
     return res.status(500).json({ error: error.message });
@@ -92,18 +88,17 @@ router.put('/edit/:cartId', async (req, res) => {
     const { quantity } = req.body;
     
     // Verify ownership
-    const existing = await db('FoodTruck.Carts')
-      .where('cartId', cartId)
-      .where('userId', user.userId)
-      .first();
+    const existing = await db.raw(`
+      SELECT * FROM "FoodTruck"."Carts" WHERE "cartId" = ${cartId} AND "userId" = ${user.userId}
+    `);
     
-    if (!existing) {
+    if (existing.rows.length === 0) {
       return res.status(403).json({ error: 'Not authorized' });
     }
     
-    await db('FoodTruck.Carts')
-      .where('cartId', cartId)
-      .update({ quantity: quantity });
+    await db.raw(`
+      UPDATE "FoodTruck"."Carts" SET "quantity" = ${quantity} WHERE "cartId" = ${cartId}
+    `);
     
     return res.status(200).json({ message: 'cart updated successfully' });
   } catch (error) {
@@ -123,18 +118,17 @@ router.delete('/delete/:cartId', async (req, res) => {
     const { cartId } = req.params;
     
     // Verify ownership
-    const existing = await db('FoodTruck.Carts')
-      .where('cartId', cartId)
-      .where('userId', user.userId)
-      .first();
+    const existing = await db.raw(`
+      SELECT * FROM "FoodTruck"."Carts" WHERE "cartId" = ${cartId} AND "userId" = ${user.userId}
+    `);
     
-    if (!existing) {
+    if (existing.rows.length === 0) {
       return res.status(403).json({ error: 'Not authorized' });
     }
     
-    await db('FoodTruck.Carts')
-      .where('cartId', cartId)
-      .del();
+    await db.raw(`
+      DELETE FROM "FoodTruck"."Carts" WHERE "cartId" = ${cartId}
+    `);
     
     return res.status(200).json({ message: 'item removed from cart successfully' });
   } catch (error) {
