@@ -10,10 +10,18 @@ A comprehensive food truck ordering system for GIU campus, built with Node.js, E
 
 ## 1. Project Description & Team Members
 
-| Name | ID | Tutorial |
-|------|-----|----------|
-| [Member 1 Name] | [ID] | [Tutorial] |
-| [Member 2 Name] | [ID] | [Tutorial] |
+### Team Hofra
+
+| Name | ID |
+|------|-----|
+| Mohamed Tamer | 16006783 |
+| Mazen Kareem | 16006745 |
+| Omar Eslam | 16009720 |
+| Mahmoud Islam | 16020369 |
+| Yassin Ezzeldin | 16007749 |
+| Ziad Samer | 16009665 |
+| Abdelrahman Ahmed | 16005571 |
+| Yassin Shereif | 16005691 |
 
 ---
 
@@ -161,42 +169,42 @@ A comprehensive food truck ordering system for GIU campus, built with Node.js, E
 
 ### Public Pages
 
-#### Login Page
-![Login](screenshots/login.png)
+#### 1. Login Page
+![Login](screenshots/1.%20Login%20Page.png)
 
-#### Register Page
-![Register](screenshots/register.png)
+#### 2. Register Page
+![Register](screenshots/2.%20Register%20Page.png)
 
 ### Customer Pages
 
-#### Customer Dashboard
-![Dashboard](screenshots/dashboard.png)
+#### 3. Customer Dashboard
+![Dashboard](screenshots/3.%20Customer%20dashboard.png)
 
-#### Browse Food Trucks
-![Trucks](screenshots/trucks.png)
+#### 4. Browse Food Trucks
+![Trucks](screenshots/4.%20Browse%20food%20trucks.png)
 
-#### Truck Menu
-![Menu](screenshots/menu.png)
+#### 5. Truck Menu Page
+![Menu](screenshots/5.%20Truck%20menu%20page.png)
 
-#### Shopping Cart
-![Cart](screenshots/cart.png)
+#### 6. Shopping Cart
+![Cart](screenshots/6.%20Shopping%20cart.png)
 
-#### My Orders
-![Orders](screenshots/orders.png)
+#### 7. My Orders
+![Orders](screenshots/7.%20My%20orders%20(cutomer).png)
 
 ### Truck Owner Pages
 
-#### Owner Dashboard
-![Owner Dashboard](screenshots/owner-dashboard.png)
+#### 8. Owner Dashboard
+![Owner Dashboard](screenshots/8.%20Owner%20dashboard.png)
 
-#### Menu Items Management
-![Menu Items](screenshots/menu-items.png)
+#### 9. Menu Items Management
+![Menu Items](screenshots/9.%20Menu%20items%20management.png)
 
-#### Add Menu Item
-![Add Menu Item](screenshots/add-menu-item.png)
+#### 10. Add Menu Item
+![Add Menu Item](screenshots/10.%20Add%20menu%20item.png)
 
-#### Truck Orders
-![Truck Orders](screenshots/truck-orders.png)
+#### 11. Truck Orders Management
+![Truck Orders](screenshots/11.%20Truck%20orders%20management.png)
 
 ---
 
@@ -298,13 +306,16 @@ milestoneBackend/
 
 ### Team Hofra
 
-| Contribution | Member |
-|--------------|--------|
-| Backend API Development | [Member Name] |
-| Frontend Templates | [Member Name] |
-| jQuery/AJAX Implementation | [Member Name] |
-| Database Design | [Member Name] |
-| Testing & Documentation | [Member Name] |
+| Name | ID |
+|------|-----|
+| Mohamed Tamer | 16006783 |
+| Mazen Kareem | 16006745 |
+| Omar Eslam | 16009720 |
+| Mahmoud Islam | 16020369 |
+| Yassin Ezzeldin | 16007749 |
+| Ziad Samer | 16009665 |
+| Abdelrahman Ahmed | 16005571 |
+| Yassin Shereif | 16005691 |
 
 ---
 
