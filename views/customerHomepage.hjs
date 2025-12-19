@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Campus Cravings - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+  <nav class="navbar navbar-default navbar-campus">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mainNav">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/customer/home">
+          <img src="/logo.png" alt="Logo" style="height:40px;display:inline-block;margin-right:10px;vertical-align:middle;" onerror="this.style.display='none'">
+          Campus Cravings
+        </a>
+      </div>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="/customer/home"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+          <li><a href="/customer/trucks"><span class="glyphicon glyphicon-cutlery"></span> Food Trucks</a></li>
+          <li><a href="/customer/orders"><span class="glyphicon glyphicon-list-alt"></span> My Orders</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/customer/cart"><span class="glyphicon glyphicon-shopping-cart"></span> Cart <span id="cartCount" class="badge">0</span></a></li>
+          <li><a href="#" id="logoutLink"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container" style="padding:20px 15px;">
+    <!-- Hero Section -->
+    <section class="jumbotron text-center" style="border-radius:16px;padding:60px 30px;margin-bottom:40px;">
+      <h1 style="font-size:48px;margin-bottom:20px;">Campus Cravings</h1>
+      <p style="font-size:22px;margin-bottom:30px;opacity:0.95;">Order ahead, pick up fast — save your 15-minute break!</p>
+      <a href="/customer/trucks" class="btn btn-browse btn-lg">
+        <span class="glyphicon glyphicon-cutlery" style="margin-right:10px;"></span>Browse Food Trucks
+      </a>
+    </section>
+
+    <!-- Stats Section -->
+    <section style="padding:40px 0;margin-bottom:40px;">
+      <div class="row text-center">
+        <div class="col-xs-6 col-md-3">
+          <div style="font-size:36px;font-weight:bold;color:#7d0c0c;">15+</div>
+          <div style="color:#6b7280;">Food Trucks</div>
+        </div>
+        <div class="col-xs-6 col-md-3">
+          <div style="font-size:36px;font-weight:bold;color:#7d0c0c;">500+</div>
+          <div style="color:#6b7280;">Daily Orders</div>
+        </div>
+        <div class="col-xs-6 col-md-3">
+          <div style="font-size:36px;font-weight:bold;color:#7d0c0c;">2min</div>
+          <div style="color:#6b7280;">Avg. Pickup Time</div>
+        </div>
+        <div class="col-xs-6 col-md-3">
+          <div style="font-size:36px;font-weight:bold;color:#7d0c0c;">4.8★</div>
+          <div style="color:#6b7280;">Customer Rating</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section style="padding:40px 0;margin-bottom:40px;">
+      <div class="text-center" style="margin-bottom:40px;">
+        <h2 style="font-size:32px;color:#1f2937;margin-bottom:15px;">Why Choose Campus Cravings?</h2>
+        <p style="font-size:18px;color:#6b7280;">Designed specifically for university students with tight schedules</p>
+      </div>
+      <div class="row">
+        <div class="col-md-3 col-sm-6">
+          <div style="background:white;border-radius:12px;padding:30px;text-align:center;box-shadow:0 4px 6px rgba(0,0,0,0.07);margin-bottom:20px;">
+            <div style="width:60px;height:60px;background:rgba(125,12,12,0.1);border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;">
+              <span class="glyphicon glyphicon-time" style="font-size:28px;color:#7d0c0c;"></span>
+            </div>
+            <h3 style="font-size:20px;margin-bottom:10px;">15-Minute Slots</h3>
+            <p style="color:#6b7280;margin:0;">Perfect for your short breaks between classes</p>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div style="background:white;border-radius:12px;padding:30px;text-align:center;box-shadow:0 4px 6px rgba(0,0,0,0.07);margin-bottom:20px;">
+            <div style="width:60px;height:60px;background:rgba(125,12,12,0.1);border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;">
+              <span class="glyphicon glyphicon-user" style="font-size:28px;color:#7d0c0c;"></span>
+            </div>
+            <h3 style="font-size:20px;margin-bottom:10px;">Skip the Queue</h3>
+            <p style="color:#6b7280;margin:0;">Order ahead and pick up your food instantly</p>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div style="background:white;border-radius:12px;padding:30px;text-align:center;box-shadow:0 4px 6px rgba(0,0,0,0.07);margin-bottom:20px;">
+            <div style="width:60px;height:60px;background:rgba(125,12,12,0.1);border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;">
+              <span class="glyphicon glyphicon-signal" style="font-size:28px;color:#7d0c0c;"></span>
+            </div>
+            <h3 style="font-size:20px;margin-bottom:10px;">Real-time Updates</h3>
+            <p style="color:#6b7280;margin:0;">Track your order status and estimated pickup time</p>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div style="background:white;border-radius:12px;padding:30px;text-align:center;box-shadow:0 4px 6px rgba(0,0,0,0.07);margin-bottom:20px;">
+            <div style="width:60px;height:60px;background:rgba(125,12,12,0.1);border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;">
+              <span class="glyphicon glyphicon-star" style="font-size:28px;color:#7d0c0c;"></span>
+            </div>
+            <h3 style="font-size:20px;margin-bottom:10px;">Top Rated Trucks</h3>
+            <p style="color:#6b7280;margin:0;">Discover the best food trucks on campus</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section style="background:#f3f4f6;border-radius:16px;padding:50px 40px;margin-bottom:40px;">
+      <div class="row">
+        <div class="col-md-6">
+          <h2 style="font-size:32px;color:#1f2937;margin-bottom:30px;">How It Works</h2>
+          <div style="margin-bottom:20px;display:flex;align-items:flex-start;">
+            <div style="width:35px;height:35px;background:#7d0c0c;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0;margin-right:15px;">1</div>
+            <div>
+              <h4 style="margin:0 0 5px;font-size:18px;">Browse Food Trucks</h4>
+              <p style="color:#6b7280;margin:0;">Explore available trucks and their menus</p>
+            </div>
+          </div>
+          <div style="margin-bottom:20px;display:flex;align-items:flex-start;">
+            <div style="width:35px;height:35px;background:#7d0c0c;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0;margin-right:15px;">2</div>
+            <div>
+              <h4 style="margin:0 0 5px;font-size:18px;">Place Your Order</h4>
+              <p style="color:#6b7280;margin:0;">Select items and choose your pickup time slot</p>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;">
+            <div style="width:35px;height:35px;background:#7d0c0c;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0;margin-right:15px;">3</div>
+            <div>
+              <h4 style="margin:0 0 5px;font-size:18px;">Pick Up & Enjoy</h4>
+              <p style="color:#6b7280;margin:0;">Collect your food instantly at your chosen time</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 text-center">
+          <div style="background:white;border-radius:16px;padding:40px;box-shadow:0 10px 25px rgba(0,0,0,0.1);">
+            <span class="glyphicon glyphicon-cutlery" style="font-size:80px;color:#7d0c0c;margin-bottom:20px;display:block;"></span>
+            <h3 style="margin-bottom:20px;">Ready to Get Started?</h3>
+            <a href="/customer/trucks" class="btn btn-primary btn-block btn-lg">Browse Food Trucks Now</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="text-center" style="padding:50px 0;">
+      <h2 style="font-size:32px;color:#1f2937;margin-bottom:15px;">Join Thousands of Happy Students</h2>
+      <p style="font-size:18px;color:#6b7280;margin-bottom:30px;">Experience the future of campus dining with smart ordering and instant pickup</p>
+      <a href="/customer/trucks" class="btn btn-primary btn-lg" style="margin-right:10px;">Browse Menu</a>
+      <a href="/customer/orders" class="btn btn-default btn-lg">View My Orders</a>
+    </section>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="/src/customerHomepage.js"></script>
+  <script>
+    $(window).scroll(function() {
+      if ($(this).scrollTop() > 10) {
+        $('.navbar-campus').addClass('scrolled');
+      } else {
+        $('.navbar-campus').removeClass('scrolled');
+      }
+    });
+  </script>
+</body>
+</html>

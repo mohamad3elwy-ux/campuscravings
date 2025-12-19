@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Campus Cravings - Menu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+  <nav class="navbar navbar-default navbar-campus">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mainNav">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/customer/home">
+          <img src="/logo.png" alt="Logo" style="height:40px;display:inline-block;margin-right:10px;vertical-align:middle;" onerror="this.style.display='none'">
+          Campus Cravings
+        </a>
+      </div>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="nav navbar-nav">
+          <li><a href="/customer/home"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+          <li class="active"><a href="/customer/trucks"><span class="glyphicon glyphicon-cutlery"></span> Food Trucks</a></li>
+          <li><a href="/customer/orders"><span class="glyphicon glyphicon-list-alt"></span> My Orders</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/customer/cart"><span class="glyphicon glyphicon-shopping-cart"></span> Cart <span id="cartCount" class="badge">0</span></a></li>
+          <li><a href="#" id="logoutLink"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container" style="padding:30px 15px;">
+    <div style="margin-bottom:25px;">
+      <a href="/customer/trucks" style="color:#7d0c0c;text-decoration:none;font-weight:500;">
+        <span class="glyphicon glyphicon-arrow-left" style="margin-right:5px;"></span> Back to Trucks
+      </a>
+    </div>
+
+    <div class="row">
+      <div class="col-md-3">
+        <div style="background:white;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.07);overflow:hidden;position:sticky;top:80px;">
+          <div style="padding:15px 20px;background:#f9fafb;border-bottom:1px solid #e5e7eb;">
+            <strong style="color:#1f2937;">Filter by Category</strong>
+          </div>
+          <div class="list-group" id="categoryFilter" style="margin:0;">
+            <a href="#" class="list-group-item active" data-category="all">All Items</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-9">
+        <div id="truckHeader" style="background:linear-gradient(135deg, #7d0c0c 0%, #9a0f0f 50%, #b81414 100%);border-radius:12px;padding:30px;color:white;margin-bottom:25px;">
+          <h1 id="truckName" style="margin:0 0 10px;font-size:32px;">Truck Menu</h1>
+          <p style="margin:0;opacity:0.9;">Browse our delicious menu items</p>
+        </div>
+
+        <div id="loadingMsg" class="text-center" style="padding:60px 0;">
+          <div class="loading-spinner"></div>
+          <p style="color:#6b7280;margin-top:15px;">Loading menu...</p>
+        </div>
+        <div id="errorMsg" class="alert alert-danger" style="display:none"></div>
+        <div id="successMsg" class="alert alert-success" style="display:none"></div>
+        <div id="menuContainer" class="row"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="/src/truckMenu.js"></script>
+  <script>$(window).scroll(function(){$('.navbar-campus').toggleClass('scrolled',$(this).scrollTop()>10);});</script>
+</body>
+</html>

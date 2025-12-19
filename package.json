@@ -1,0 +1,24 @@
+{
+  "name": "campus-cravings",
+  "version": "1.0.0",
+  "description": "Campus Cravings - Food Truck Ordering System",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "hjs": "^0.0.6",
+    "knex": "^2.4.2",
+    "pg": "^8.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}

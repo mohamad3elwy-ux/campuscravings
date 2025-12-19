@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Campus Cravings - Cart</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+  <nav class="navbar navbar-default navbar-campus">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mainNav">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/customer/home">
+          <img src="/logo.png" alt="Logo" style="height:40px;display:inline-block;margin-right:10px;vertical-align:middle;" onerror="this.style.display='none'">
+          Campus Cravings
+        </a>
+      </div>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="nav navbar-nav">
+          <li><a href="/customer/home"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+          <li><a href="/customer/trucks"><span class="glyphicon glyphicon-cutlery"></span> Food Trucks</a></li>
+          <li><a href="/customer/orders"><span class="glyphicon glyphicon-list-alt"></span> My Orders</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="active"><a href="/customer/cart"><span class="glyphicon glyphicon-shopping-cart"></span> Cart <span id="cartCount" class="badge">0</span></a></li>
+          <li><a href="#" id="logoutLink"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container" style="padding:30px 15px;">
+    <h1 style="font-size:32px;color:#1f2937;margin-bottom:30px;"><span class="glyphicon glyphicon-shopping-cart" style="margin-right:10px;color:#7d0c0c;"></span>Your Cart</h1>
+
+    <div id="loadingMsg" class="text-center" style="padding:60px 0;">
+      <div class="loading-spinner"></div>
+      <p style="color:#6b7280;margin-top:15px;">Loading cart...</p>
+    </div>
+
+    <div id="errorMsg" class="alert alert-danger" style="display:none"></div>
+    <div id="successMsg" class="alert alert-success" style="display:none"></div>
+
+    <div id="emptyCartMsg" class="text-center" style="display:none;padding:60px 0;">
+      <div style="font-size:60px;margin-bottom:15px;">🛒</div>
+      <h3 style="color:#1f2937;margin-bottom:10px;">Your cart is empty</h3>
+      <p style="color:#6b7280;margin-bottom:20px;">Add some delicious items from our food trucks!</p>
+      <a href="/customer/trucks" class="btn btn-primary btn-lg">Browse Food Trucks</a>
+    </div>
+
+    <div id="cartContent" style="display:none;">
+      <div style="background:white;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.07);overflow:hidden;margin-bottom:25px;">
+        <table class="table" style="margin:0;">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Price</th>
+              <th style="width:150px;">Quantity</th>
+              <th>Subtotal</th>
+              <th style="width:100px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="cartTableBody"></tbody>
+          <tfoot>
+            <tr style="background:#f9fafb;">
+              <td colspan="3" style="text-align:right;font-weight:600;font-size:18px;">Total:</td>
+              <td colspan="2" style="font-weight:700;font-size:20px;color:#7d0c0c;" id="cartTotal">EGP 0.00</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div style="background:white;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.07);padding:25px;">
+        <h3 style="margin:0 0 20px;color:#1f2937;"><span class="glyphicon glyphicon-credit-card" style="margin-right:10px;color:#7d0c0c;"></span>Checkout</h3>
+        <form id="checkoutForm">
+          <div class="form-group">
+            <label for="scheduledPickupTime" style="color:#374151;font-weight:500;">Scheduled Pickup Time (optional)</label>
+            <input type="datetime-local" class="form-control" id="scheduledPickupTime">
+            <small style="color:#6b7280;">Leave empty for ASAP pickup</small>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg" style="padding:12px 40px;">
+            <span class="glyphicon glyphicon-ok" style="margin-right:8px;"></span>Place Order
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="/src/cart.js"></script>
+  <script>$(window).scroll(function(){$('.navbar-campus').toggleClass('scrolled',$(this).scrollTop()>10);});</script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Campus Cravings - Owner Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+  <nav class="navbar navbar-default navbar-campus">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mainNav">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/owner/dashboard">
+          <img src="/logo.png" alt="Logo" style="height:40px;display:inline-block;margin-right:10px;vertical-align:middle;" onerror="this.style.display='none'">
+          Campus Cravings
+        </a>
+      </div>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="/owner/dashboard"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
+          <li><a href="/owner/menu"><span class="glyphicon glyphicon-list"></span> Menu Items</a></li>
+          <li><a href="/owner/orders"><span class="glyphicon glyphicon-shopping-cart"></span> Orders</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#" id="logoutLink"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container" style="padding:30px 15px;">
+    <h1 style="font-size:32px;color:#1f2937;margin-bottom:30px;"><span class="glyphicon glyphicon-dashboard" style="margin-right:10px;color:#7d0c0c;"></span>Truck Owner Dashboard</h1>
+
+    <div id="loadingMsg" class="text-center" style="padding:60px 0;">
+      <div class="loading-spinner"></div>
+      <p style="color:#6b7280;margin-top:15px;">Loading dashboard...</p>
+    </div>
+    <div id="errorMsg" class="alert alert-danger" style="display:none"></div>
+    <div id="successMsg" class="alert alert-success" style="display:none"></div>
+
+    <div id="dashboardContent" style="display:none;">
+      <div class="row">
+        <div class="col-md-6" style="margin-bottom:25px;">
+          <div style="background:white;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.07);overflow:hidden;">
+            <div style="background:linear-gradient(135deg, #7d0c0c 0%, #9a0f0f 50%, #b81414 100%);padding:15px 20px;color:white;">
+              <strong><span class="glyphicon glyphicon-cutlery" style="margin-right:8px;"></span>My Truck</strong>
+            </div>
+            <div style="padding:25px;">
+              <h3 id="truckName" style="margin:0 0 15px;color:#1f2937;"></h3>
+              <p style="margin-bottom:10px;"><strong>Status:</strong> <span id="truckStatus" class="label"></span></p>
+              <p style="margin-bottom:20px;"><strong>Order Status:</strong> <span id="orderStatus" class="label"></span></p>
+              <hr style="border-color:#e5e7eb;">
+              <div class="form-group">
+                <label style="color:#374151;font-weight:500;">Toggle Order Availability:</label>
+                <select class="form-control" id="orderStatusSelect">
+                  <option value="available">Available - Accepting Orders</option>
+                  <option value="unavailable">Unavailable - Not Taking Orders</option>
+                </select>
+              </div>
+              <button class="btn btn-primary" id="updateStatusBtn">
+                <span class="glyphicon glyphicon-refresh" style="margin-right:5px;"></span>Update Status
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6" style="margin-bottom:25px;">
+          <div style="background:white;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.07);overflow:hidden;">
+            <div style="background:#0ea5e9;padding:15px 20px;color:white;">
+              <strong><span class="glyphicon glyphicon-stats" style="margin-right:8px;"></span>Quick Stats</strong>
+            </div>
+            <div style="padding:25px;">
+              <div style="display:flex;justify-content:space-around;margin-bottom:25px;">
+                <div class="text-center">
+                  <div style="font-size:36px;font-weight:bold;color:#7d0c0c;" id="menuCount">0</div>
+                  <div style="color:#6b7280;">Menu Items</div>
+                </div>
+                <div class="text-center">
+                  <div style="font-size:36px;font-weight:bold;color:#f59e0b;" id="pendingOrders">0</div>
+                  <div style="color:#6b7280;">Pending Orders</div>
+                </div>
+              </div>
+              <hr style="border-color:#e5e7eb;">
+              <div style="display:flex;gap:10px;">
+                <a href="/owner/menu" class="btn btn-default" style="flex:1;"><span class="glyphicon glyphicon-list" style="margin-right:5px;"></span>Manage Menu</a>
+                <a href="/owner/orders" class="btn btn-primary" style="flex:1;"><span class="glyphicon glyphicon-shopping-cart" style="margin-right:5px;"></span>View Orders</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="/src/ownerDashboard.js"></script>
+  <script>$(window).scroll(function(){$('.navbar-campus').toggleClass('scrolled',$(this).scrollTop()>10);});</script>
+</body>
+</html>
