@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -16,6 +17,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+// Import middleware
+const { isAuthenticated } = require('./middleware/auth');
 
 // Import API routes (Milestone 3 backend)
 const menuItemRoutes = require('./routes/menuItem');
@@ -24,16 +29,10 @@ const cartRoutes = require('./routes/cart');
 const orderRoutes = require('./routes/order');
 
 // Import public view & auth API routes (Milestone 4 frontend)
-let publicViewRoutes;
-let publicApiRoutes;
-try {
-  publicViewRoutes = require('./routes/public/view');
-  publicApiRoutes = require('./routes/public/api');
-} catch (err) {
-  // If Milestone 4 routes are not created yet, ignore to keep backend working
-  publicViewRoutes = null;
-  publicApiRoutes = null;
-}
+const publicViewRoutes = require('./routes/public/view');
+const publicApiRoutes = require('./routes/public/api');
+const privateViewRoutes = require('./routes/private/view');
+const privateApiRoutes = require('./routes/private/api');
 
 // Use API routes
 app.use('/api/v1/menuItem', menuItemRoutes);
@@ -41,13 +40,13 @@ app.use('/api/v1/trucks', trucksRoutes);
 app.use('/api/v1/cart', cartRoutes);
 app.use('/api/v1/order', orderRoutes);
 
-// Use public routes when available
-if (publicViewRoutes) {
-  app.use('/', publicViewRoutes);
-}
-if (publicApiRoutes) {
-  app.use('/', publicApiRoutes);
-}
+// Public routes (no auth required)
+app.use('/', publicViewRoutes);
+app.use('/api/v1', publicApiRoutes);
+
+// Private routes (auth required)
+app.use('/', isAuthenticated, privateViewRoutes);
+app.use('/api/v1', isAuthenticated, privateApiRoutes);
 
 // Welcome endpoint (fallback JSON)
 app.get('/', (req, res) => {
