@@ -32,7 +32,6 @@ const orderRoutes = require('./routes/order');
 const publicViewRoutes = require('./routes/public/view');
 const publicApiRoutes = require('./routes/public/api');
 const privateViewRoutes = require('./routes/private/view');
-const privateApiRoutes = require('./routes/private/api');
 
 // Use API routes
 app.use('/api/v1/menuItem', menuItemRoutes);
@@ -44,9 +43,8 @@ app.use('/api/v1/order', orderRoutes);
 app.use('/', publicViewRoutes);
 app.use('/api/v1', publicApiRoutes);
 
-// Private routes (auth required)
+// Private view routes (auth required)
 app.use('/', isAuthenticated, privateViewRoutes);
-app.use('/api/v1', isAuthenticated, privateApiRoutes);
 
 // Welcome endpoint (fallback JSON)
 app.get('/', (req, res) => {

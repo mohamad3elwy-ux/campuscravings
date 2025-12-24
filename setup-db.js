@@ -1,11 +1,7 @@
 const { Client } = require('pg');
 
 const client = new Client({
-  host: 'hopper.proxy.rlwy.net',
-  port: 42966,
-  user: 'postgres',
-  password: 'pmmOsjWxooshuzUUTEZgcXqidqDwokjb',
-  database: 'railway',
+  connectionString: 'postgresql://campuscravings_db_user:7F0IF2hfRDFfcyUZhFKreB6XR7xnWinE@dpg-d55t1sngi27c73dq1rt0-a.frankfurt-postgres.render.com/campuscravings_db',
   ssl: { rejectUnauthorized: false }
 });
 

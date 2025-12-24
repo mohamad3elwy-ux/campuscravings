@@ -14,8 +14,8 @@ const connectionConfig = process.env.DATABASE_URL
       database: 'postgres'
     };
 
-// For Render connecting to Railway Postgres (public URL)
-// DATABASE_URL=postgresql://postgres:pmmOsjWxooshuzUUTEZgcXqidqDwokjb@hopper.proxy.rlwy.net:42966/railway
+// Render PostgreSQL URL
+// DATABASE_URL=postgresql://campuscravings_db_user:7F0IF2hfRDFfcyUZhFKreB6XR7xnWinE@dpg-d55t1sngi27c73dq1rt0-a.frankfurt-postgres.render.com/campuscravings_db
 
 const db = knex({
   client: 'pg',
