@@ -1,4 +1,4 @@
-const db = require('../connectors/knex');
+const db = require('../connectors/db');
 
 /**
  * getUser - Retrieves the currently logged in user from session token

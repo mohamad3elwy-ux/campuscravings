@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../connectors/knex');
+const db = require('../connectors/db');
 const { getUser } = require('../utils/session');
 
 // ============================================

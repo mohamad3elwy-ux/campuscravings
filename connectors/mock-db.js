@@ -15,14 +15,27 @@ const menuItems = [
   { itemId: 4, truckId: 1, name: 'Soft Drink', description: 'Cold refreshing drink', price: 10.00, category: 'Beverages', status: 'available' }
 ];
 
-const carts = [];
-const orders = [];
-const orderItems = [];
+const carts = [
+  { cartId: 1, userId: 1, itemId: 1, quantity: 2, price: 45.99 },
+  { cartId: 2, userId: 1, itemId: 3, quantity: 1, price: 15.00 }
+];
+
+const orders = [
+  { orderId: 1, userId: 1, truckId: 1, totalPrice: 106.98, orderStatus: 'pending', createdAt: new Date() },
+  { orderId: 2, userId: 1, truckId: 1, totalPrice: 45.99, orderStatus: 'ready', createdAt: new Date() }
+];
+
+const orderItems = [
+  { orderItemId: 1, orderId: 1, itemId: 1, quantity: 2, price: 45.99 },
+  { orderItemId: 2, orderId: 1, itemId: 3, quantity: 1, price: 15.00 },
+  { orderItemId: 3, orderId: 2, itemId: 1, quantity: 1, price: 45.99 }
+];
+
 const sessions = [];
 
-let nextCartId = 1;
-let nextOrderId = 1;
-let nextOrderItemId = 1;
+let nextCartId = 3;
+let nextOrderId = 3;
+let nextOrderItemId = 4;
 let nextSessionId = 1;
 let nextItemId = 5;
 
@@ -45,6 +58,34 @@ const mockDb = {
         }
       }
       return { rows: users };
+    }
+    
+    // Handle JOIN query from getUser (Sessions JOIN Users LEFT JOIN Trucks)
+    if (q.includes('select') && q.includes('from "foodtruck"."sessions"') && q.includes('join')) {
+      const tokenMatch = query.match(/token.*?=.*?'([^']+)'/i);
+      if (tokenMatch) {
+        const session = sessions.find(s => s.token === tokenMatch[1]);
+        if (session) {
+          const user = users.find(u => u.userId === session.userId);
+          if (user) {
+            const truck = trucks.find(t => t.ownerId === user.userId);
+            return { rows: [{
+              id: session.id,
+              userId: user.userId,
+              token: session.token,
+              expiresAt: session.expiresAt,
+              name: user.name,
+              birthDate: user.birthDate,
+              email: user.email,
+              password: user.password,
+              role: user.role,
+              truckId: truck ? truck.truckId : null
+            }] };
+          }
+        }
+        return { rows: [] };
+      }
+      return { rows: sessions };
     }
     
     if (q.includes('select') && q.includes('from "foodtruck"."sessions"')) {
