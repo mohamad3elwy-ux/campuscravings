@@ -54,7 +54,7 @@
 
   <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <script src="/src/ownerMenu.js"></script>
+  <script src="/src/menuItems.js"></script>
   <script>$(window).scroll(function(){$('.navbar-campus').toggleClass('scrolled',$(this).scrollTop()>10);});</script>
 </body>
 </html>
