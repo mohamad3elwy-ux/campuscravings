@@ -156,6 +156,30 @@ const mockDb = {
       return { rows: carts };
     }
     
+    // Handle Orders with JOIN (for truckOrders and myOrders)
+    if (q.includes('select') && q.includes('from "foodtruck"."orders"') && q.includes('join')) {
+      const truckIdMatch = query.match(/truckid.*?=.*?(\d+)/i);
+      if (truckIdMatch) {
+        // Truck orders - join with users to get customer name
+        const truckOrders = orders.filter(o => o.truckId === parseInt(truckIdMatch[1]));
+        const result = truckOrders.map(o => {
+          const customer = users.find(u => u.userId === o.userId);
+          return { ...o, customerName: customer ? customer.name : 'Unknown' };
+        });
+        return { rows: result };
+      }
+      const userIdMatch = query.match(/userid.*?=.*?(\d+)/i);
+      if (userIdMatch) {
+        // User orders - join with trucks to get truck name
+        const userOrders = orders.filter(o => o.userId === parseInt(userIdMatch[1]));
+        const result = userOrders.map(o => {
+          const truck = trucks.find(t => t.truckId === o.truckId);
+          return { ...o, truckName: truck ? truck.truckName : 'Unknown' };
+        });
+        return { rows: result };
+      }
+    }
+    
     if (q.includes('select') && q.includes('from "foodtruck"."orders"')) {
       const userIdMatch = query.match(/userid.*?=.*?(\d+)/i);
       if (userIdMatch) {
