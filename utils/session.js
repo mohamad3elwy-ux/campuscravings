@@ -2,18 +2,6 @@ const db = require('../connectors/db');
 
 /**
  * getUser - Retrieves the currently logged in user from session token
- * 
- * Returns user object with:
- * - id: session id
- * - userId: user id
- * - token: session token
- * - expiresAt: session expiry date
- * - name: user name
- * - birthDate: user birth date
- * - email: user email
- * - password: user password (hashed)
- * - role: 'customer' or 'truckOwner'
- * - truckId: truck id (if truckOwner)
  */
 async function getUser(req) {
   try {
@@ -26,27 +14,29 @@ async function getUser(req) {
     // Remove 'Bearer ' prefix if present
     const cleanToken = token.replace('Bearer ', '');
     
-    const result = await db.raw(`
-      SELECT 
-        s."id",
-        s."userId",
-        s."token",
-        s."expiresAt",
-        u."name",
-        u."birthDate",
-        u."email",
-        u."password",
-        u."role",
-        t."truckId"
-      FROM "FoodTruck"."Sessions" s
-      JOIN "FoodTruck"."Users" u ON s."userId" = u."userId"
-      LEFT JOIN "FoodTruck"."Trucks" t ON u."userId" = t."ownerId"
-      WHERE s."token" = '${cleanToken}'
-      AND s."expiresAt" > NOW()
-      LIMIT 1
+    // Get session
+    const sessionResult = await db.raw(`
+      SELECT * FROM "FoodTruck"."Sessions" WHERE "token" = '${cleanToken}'
     `);
     
-    return result.rows[0] || null;
+    if (!sessionResult.rows || sessionResult.rows.length === 0) {
+      return null;
+    }
+    
+    const session = sessionResult.rows[0];
+    
+    // Get user with truckId
+    const userResult = await db.raw(`
+      SELECT u.*, t."truckId" FROM "FoodTruck"."Users" u
+      LEFT JOIN "FoodTruck"."Trucks" t ON u."userId" = t."ownerId"
+      WHERE u."userId" = ${session.userId}
+    `);
+    
+    if (!userResult.rows || userResult.rows.length === 0) {
+      return null;
+    }
+    
+    return { ...session, ...userResult.rows[0] };
   } catch (error) {
     console.error('getUser error:', error.message);
     return null;
