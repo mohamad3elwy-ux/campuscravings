@@ -1,6 +1,6 @@
 // Mock database for evaluation - no external DB needed
 const users = [
-  { userId: 1, name: 'Ahmed Mohamed', email: 'ahmed@example.com', password: 'password123', role: 'customer', birthDate: '1998-05-15' },
+  { userId: 1, name: 'Ahmed Mohamed', email: 'ahmed@example.com', password: 'password123', role: 'customer', birthDate: '1998-05-15', truckId: null },
   { userId: 2, name: 'Sara Ali', email: 'sara@example.com', password: 'password123', role: 'truckOwner', birthDate: '2000-08-22', truckId: 1 }
 ];
 
