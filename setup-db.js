@@ -1,8 +1,11 @@
 const { Client } = require('pg');
 
 const client = new Client({
-  connectionString: 'postgresql://campuscravings_db_user:7F0IF2hfRDFfcyUZhFKreB6XR7xnWinE@dpg-d55t1sngi27c73dq1rt0-a.frankfurt-postgres.render.com/campuscravings_db',
-  ssl: { rejectUnauthorized: false }
+  host: 'localhost',
+  port: 5432,
+  user: 'postgres',
+  password: 'postgres',
+  database: 'postgres'
 });
 
 const schema = `
