@@ -10,29 +10,33 @@ const isAuthenticated = async (req, res, next) => {
     }
 
     // Verify session exists in database
-    const session = await db('FoodTruck.Sessions')
-      .where('token', token)
-      .andWhere('expiresAt', '>', new Date())
-      .first();
+    const sessionResult = await db.raw(`
+      SELECT * FROM "FoodTruck"."Sessions" 
+      WHERE "token" = '${token}' AND "expiresAt" > NOW()
+    `);
 
-    if (!session) {
+    if (!sessionResult.rows || sessionResult.rows.length === 0) {
       res.clearCookie('token');
       return res.redirect('/');
     }
 
-    // Get user info
-    const user = await db('FoodTruck.Users')
-      .where('userId', session.userId)
-      .first();
+    const session = sessionResult.rows[0];
 
-    if (!user) {
+    // Get user info
+    const userResult = await db.raw(`
+      SELECT u.*, t."truckId" FROM "FoodTruck"."Users" u
+      LEFT JOIN "FoodTruck"."Trucks" t ON u."userId" = t."ownerId"
+      WHERE u."userId" = ${session.userId}
+    `);
+
+    if (!userResult.rows || userResult.rows.length === 0) {
       res.clearCookie('token');
       return res.redirect('/');
     }
 
     // Attach user to request
-    req.user = user;
-    req.userId = user.userId;
+    req.user = userResult.rows[0];
+    req.userId = userResult.rows[0].userId;
     next();
   } catch (error) {
     console.error('Auth middleware error:', error);

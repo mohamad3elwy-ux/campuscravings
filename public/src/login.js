@@ -20,9 +20,9 @@ $(document).ready(function () {
         $('#loginSuccess').text('Login successful. Redirecting...').show();
 
         if (data.user.role === 'truckOwner') {
-          window.location.href = '/owner/dashboard';
+          window.location.href = '/ownerDashboard';
         } else {
-          window.location.href = '/customer/home';
+          window.location.href = '/dashboard';
         }
       },
       error: function (xhr) {
