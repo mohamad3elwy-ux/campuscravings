@@ -277,19 +277,20 @@ const mockDb = {
     }
     
     if (q.includes('insert into "foodtruck"."menuitems"')) {
-      const truckIdMatch = query.match(/values.*?\((\d+)/i);
-      const nameMatch = query.match(/'([^']+)'.*?'([^']*)'.*?([\d.]+).*?'([^']+)'/i);
-      if (truckIdMatch && nameMatch) {
+      // Format: VALUES (truckId, 'name', price, 'description', 'category')
+      const valuesMatch = query.match(/values\s*\(\s*(\d+)\s*,\s*'([^']*)'\s*,\s*([\d.]+)\s*,\s*'([^']*)'\s*,\s*'([^']*)'\s*\)/i);
+      if (valuesMatch) {
         const item = {
           itemId: nextItemId++,
-          truckId: parseInt(truckIdMatch[1]),
-          name: nameMatch[1],
-          description: nameMatch[2],
-          price: parseFloat(nameMatch[3]),
-          category: nameMatch[4],
+          truckId: parseInt(valuesMatch[1]),
+          name: valuesMatch[2],
+          price: parseFloat(valuesMatch[3]),
+          description: valuesMatch[4],
+          category: valuesMatch[5],
           status: 'available'
         };
         menuItems.push(item);
+        console.log('Added menu item:', item);
       }
       return { rows: [] };
     }
