@@ -44,6 +44,20 @@ const mockDb = {
     const q = query.toLowerCase().trim();
     
     // SELECT queries
+    
+    // Handle Users with LEFT JOIN Trucks (from auth.js middleware)
+    if (q.includes('select') && q.includes('from "foodtruck"."users"') && q.includes('left join')) {
+      const userIdMatch = query.match(/userid.*?=.*?(\d+)/i);
+      if (userIdMatch) {
+        const user = users.find(u => u.userId === parseInt(userIdMatch[1]));
+        if (user) {
+          const truck = trucks.find(t => t.ownerId === user.userId);
+          return { rows: [{ ...user, truckId: truck ? truck.truckId : null }] };
+        }
+        return { rows: [] };
+      }
+    }
+    
     if (q.includes('select') && q.includes('from "foodtruck"."users"')) {
       if (q.includes('where')) {
         const emailMatch = query.match(/email.*?=.*?'([^']+)'/i);
