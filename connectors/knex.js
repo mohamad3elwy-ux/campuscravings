@@ -19,7 +19,14 @@ const connectionConfig = process.env.DATABASE_URL
 
 const db = knex({
   client: 'pg',
-  connection: connectionConfig
+  connection: connectionConfig,
+  pool: {
+    min: 0,
+    max: 5,
+    acquireTimeoutMillis: 60000,
+    idleTimeoutMillis: 30000,
+    reapIntervalMillis: 1000
+  }
 });
 
 module.exports = db;
