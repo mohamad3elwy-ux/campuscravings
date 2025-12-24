@@ -41,11 +41,11 @@ router.get('/owner/dashboard', (req, res) => {
 });
 
 router.get('/owner/menu', (req, res) => {
-  res.render('ownerMenu');
+  res.render('menuItems');
 });
 
 router.get('/owner/menu/add', (req, res) => {
-  res.render('ownerMenuAdd');
+  res.render('addMenuItem');
 });
 
 router.get('/owner/menu/edit/:itemId', (req, res) => {
@@ -53,7 +53,7 @@ router.get('/owner/menu/edit/:itemId', (req, res) => {
 });
 
 router.get('/owner/orders', (req, res) => {
-  res.render('ownerOrders');
+  res.render('truckOrders');
 });
 
 module.exports = router;
